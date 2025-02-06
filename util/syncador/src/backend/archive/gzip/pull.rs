@@ -52,6 +52,7 @@ impl Pull {
 		manifest: PackageElement,
 		destination: PathBuf,
 	) -> Result<PackageElement, anyhow::Error> {
+		info!("CREATING DIR");
 		// Create the destination directory if it doesn't exist
 		fs::create_dir_all(&destination).await?;
 
@@ -114,7 +115,9 @@ impl PullOperations for Pull {
 		let package = package.ok_or(anyhow::anyhow!("package is none"))?;
 
 		let mut manifests = Vec::new();
+		info!("Trying to iterate over package: {:?}", package);
 		for manifest in package.0.into_iter() {
+			info("In this bish");
 			let new_manifest =
 				Self::ungzip_tar_manifest(manifest, self.destination_dir.clone()).await?;
 			manifests.push(new_manifest);
